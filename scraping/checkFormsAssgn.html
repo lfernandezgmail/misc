@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+    <title>Forms Assignment</title>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    
+$(document).ready(function(){
+    $("button").click(function(){
+        var urlVar = document.getElementById('urlPath').value;
+        urlVar = urlVar.replace("https", "http");
+        var jqxhr = $.get( urlVar, function( data ) {
+            var myElement =document.createElement('html');
+            myElement.innerHTML = data;
+            document.getElementById("debug").innerHTML=data;
+            test(data, myElement);
+            
+            //stick in the student's stylesheet
+            var myCSSLink = document.createElement("link");
+            var cssURL = urlVar;
+            var cssPath = cssURL.replace("index.html", "");
+            var regexPattern = "\/$";
+            if ( cssPath.match(regexPattern) == null){
+            cssPath = cssPath + "/";
+            };
+            cssPath = cssPath + "styles.css";
+            myCSSLink.setAttribute('href', cssPath );
+            myCSSLink.setAttribute('rel', 'stylesheet' );
+            document.getElementsByTagName("head")[0].appendChild(myCSSLink);
+
+        })
+          .fail(function() {
+            alert( "Error: most likely you put in a URL that was not accessible - make sure to use http not https" );
+          })
+        
+    });
+});
+
+  
+function test(data, myElement){
+    var errors = "";
+    var score = 15;
+    try {
+        console.log(myElement);
+        var inputFieldArray = document.getElementsByName("login_name");
+        console.log("login_name, should be 1: " + inputFieldArray);
+        if (inputFieldArray.length == 1){
+            errors = errors + "You have the correct login name field (+10)<br>";
+            score = score + 20;
+        }else{
+            errors = errors + "<span style='color:red'>Something is wrong in your login name form field (-20)</span><br>";
+        }
+    }
+    catch(err) {
+        errors = errors + err + "<span style='color:red'>Something is wrong in your login name form field...(-20)</span><br>";
+    }
+    
+    try {
+        var inputFieldArray = document.getElementsByName("login_pass");
+        console.log("login_pass, should be 1: " + inputFieldArray);
+        if (inputFieldArray.length == 1){
+            errors = errors + "You have the correct password name field (+10)<br>";
+            score = score + 10;
+        }else{
+            errors = errors + "<span style='color:red'>Something is wrong in your password name form field (-10)</span><br>";
+        }
+    }
+    catch(err) {
+        errors = errors + "<span style='color:red'>Something is wrong in your password name form field...(-10)</span><br>";
+    }
+    
+    try {
+        var inputFieldArray = document.getElementsByName("fav_editor");
+        console.log("fav_editor, should be 1: " + inputFieldArray);
+        if (inputFieldArray.length == 3){
+            errors = errors + "You have the correct number of radio buttons (+10)<br>";
+            score = score + 10;
+        }else{
+            errors = errors + "<span style='color:red'>You have the wrong number of radio buttons. (-10)</span><br>";
+        }
+    }
+    catch(err) {
+        errors = errors + "<span style='color:red'>Something seems wrong in how you have coded your radio buttons...(-10)</span><br>";
+    }
+
+    try {
+        var inputFieldArray = document.getElementsByName("fav_editor")[1].checked;
+        console.log("fav_editor checked editor  should be 1 or true: " + inputFieldArray);
+        if (inputFieldArray == 1){
+            errors = errors + "You have the correct radio button checked (+10)<br>";
+            score = score + 10;
+        }else{
+            errors = errors + "<span style='color:red'>Something is wrong in how you have coded the radio button that needs to be checked (-10)</span><br>";
+        }
+    }
+    catch(err) {
+        errors = errors + "<span style='color:red'>Something is wrong in how you have coded the radio button that needs to be checked ...(-10)</span><br>";
+    }
+
+
+    try {
+        var inputFieldArray = document.getElementsByName("fav_titan");
+        console.log("fav_titan: " + inputFieldArray);
+        if (inputFieldArray.length == 4){
+            errors = errors + "You have the correct number of check boxes (+10)<br>";
+            score = score + 10;
+        }else{
+            errors = errors + "<span style='color:red'>Something is wrong in how you have coded your check boxes (-10)</span><br>";
+        }
+    }
+    catch(err) {
+        errors = errors + "<span style='color:red'>Something seems wrong in how you have coded your check boxes...(-10)</span><br>";
+    }
+
+    try {
+        var inputFieldArray = document.getElementsByName("phil");
+        console.log("phil: " + inputFieldArray);
+        if (inputFieldArray.length == 1){
+            errors = errors + "You have the textarea correctly coded (+10)<br>";
+            score = score + 10;
+        }else{
+            errors = errors + "<span style='color:red'>Something is wrong in how you have coded your textarea (-10)</span><br>";
+        }
+    }
+    catch(err) {
+        errors = errors + "<span style='color:red'>Something seems wrong in how you have coded your textarea...(-10)</span><br>";
+    }
+
+    try {
+        var inputFieldArray = document.getElementsByName("web_framework")[0].options;
+        console.log("web_framework: " + inputFieldArray);
+        if (inputFieldArray.length == 4){
+            errors = errors + "You have the correct number of options in your select dropdown list (+10)<br>";
+            score = score + 10;
+        }else{
+            errors = errors + "<span style='color:red'>Something is wrong in your select dropdown list (-10)</span><br>";
+        }
+    }
+    catch(err) {
+        errors = errors + "<span style='color:red'>Something is wrong in your select dropdown list...(-10)</span><br>";
+    }
+ 
+    try {
+        var urlEcho = document.getElementsByTagName("form")[0].action;
+        console.log("form url: " + urlEcho);
+        if (urlEcho == "http://jkorpela.fi/cgi-bin/echo.cgi"){
+            errors = errors + "You have the action attribute in your form correctly coded (+10)<br>";
+            score = score + 10;
+        }else{
+            errors = errors + "<span style='color:red'>Something is wrong in your forms action attribute (-10)</span><br>";
+        }
+    }
+    catch(err) {
+        errors = errors + "<span style='color:red'>Something is wrong in your forms action attribute...(-10)</span><br>";
+    }
+
+    try {
+        var fieldSetArr = myElement.getElementsByTagName("fieldset");
+        console.log("fieldset, should be at least 2: " + fieldSetArr);
+        if (fieldSetArr.length > 1){
+            errors = errors + "You have the correct number of fieldsets (+10)<br>";
+            score = score + 10;
+        }else{
+            errors = errors + "<span style='color:red'>Something is wrong in your fieldsets (-10)</span><br>";
+        }
+    }
+    catch(err) {
+        errors = errors + "<span style='color:red'>Something is wrong in your fieldsets...(-10)</span><br>";
+    }
+
+    if (myElement.innerHTML.length < 1){
+    errors = "<span style='color:red'>ARE YOU SURE YOU ENTERED THE RIGHT URL? (No content seems to have been returned)</span><br>";
+    }
+
+    try {
+        var labelArr = myElement.getElementsByTagName("label");
+        console.log("label, should be at least 3: " + labelArr);
+        if (labelArr.length > 2){
+            errors = errors + "You have labels (+10)<br>";
+            score = score + 10;
+        }else{
+            errors = errors + "<span style='color:red'>Something is wrong in your labels (-10)</span><br>";
+        }
+    }
+    catch(err) {
+        errors = errors + "<span style='color:red'>Something is wrong in your labels...(-10)</span><br>";
+    }
+
+    if (myElement.innerHTML.length < 1){
+    errors = "<span style='color:red'>ARE YOU SURE YOU ENTERED THE RIGHT URL? (No content seems to have been returned)</span><br>";
+    }
+
+
+
+
+
+    document.getElementById('errors').innerHTML = errors   ;
+    document.getElementById('score').innerHTML = "Your score is " +  score + " out of 125 points (15 points are free)"  ; 
+}
+
+
+function tryReferrer(){
+    console.log("document.referrer:: " + document.referrer);
+    if (document.referrer.length > 10){
+        document.getElementById("urlPath").value=document.referrer;
+        document.getElementsByTagName('button')[0].click();
+    }
+}
+    
+</script>
+<style>
+/*    #debug{display:none};*/
+</style>
+</head>
+<body onload="tryReferrer()">
+<h4>Validator For Forms Assignment (Catches some errors but not all of them..)</h4>
+  
+    
+<input type="text" id="urlPath" size="100" value="" ><br><br>
+
+<button>Test</button>
+<p></p>
+   
+<div id="errors"></div>   
+<div id="score"></div>
+<div id="debug"></div>
+</body>
+</html>

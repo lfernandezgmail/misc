@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <title>Scraping</title>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("button").click(function(){
+    	var urlVar = document.getElementById('urlPath').value;
+        $("#div1").load( urlVar, function() {
+            test();
+        });
+        
+//         $("#div1").load("http://127.0.0.1:62158/as01/index.html", function() {
+//            test();
+//         });
+//        
+        
+    });
+});
+    
+  
+function test(){
+    var errors = "";
+    try {
+        var h1s1 = document.getElementsByTagName("h1");
+        if (h1s1.length == 1){
+            errors = errors + "You have the correct number of H1 elements.<br>";
+        }else{
+            errors = errors + "<span style='color:red'>You have the wrong number of H1 elements.</span><br>";
+        }
+    }
+    catch(err) {
+        errors = errors + "<span style='color:red'>Something seems wrong in how you have coded your H1 elements...</span><br>";
+    }
+    
+//    try {
+//        var headerInBody = document.getElementById("div1").getElementsByTagName("header");
+//        errors = errors + headerInBody.length + "It looks like you have placed the heading in the body where it belongs.  Good! <br>";
+//
+//    }
+//    catch(err) {
+//        errors = errors + "<span style='color:red'>Something seems wrong in how you have coded your heading.  Very likely you put it in the head ...</span><br>";
+//    }
+    
+    
+    
+    try {
+        var section2 = document.getElementsByTagName("section");
+        if (section2.length == 2){
+            errors = errors +  " You have the correct number of section elements.<br>";
+        }else{
+            errors = errors + "<span style='color:red'> Something seems wrong in how you have coded your sections </span><br>";
+        }
+    }
+    catch(err) {
+        errors = errors + "<span style='color:red'>Something seems wrong in how you have coded your section elements... </span><br>";
+    }
+    
+    try {
+        var colorChangeVar1 = document.getElementsByClassName("color_change");
+        if (colorChangeVar1.length == 2){
+            errors = errors +  " You have the correct number of color_change classes<br>";
+        }else{
+            errors = errors + "<span style='color:red'> Something is probably wrong in how you have coded the color_change class </span><br>";
+        }
+    }
+    catch(err) {
+        errors = errors + "<span style='color:red'> Something seems wrong in how you have coded the color_class... </span><br>";
+    }
+    
+    try {
+        var mainHeaderVar1 = document.getElementById("main_header").tagName;
+        if (mainHeaderVar1 == "HEADER"){
+            errors = errors +  " You seem to have coded the header tag and its associated class named main_header correctly <br>";
+        }else{
+            errors = errors + "<span style='color:red'> Something is probably wrong in how you have coded the main_header class </span><br>";
+        }
+    }
+    catch(err) {
+        errors = errors + "<span style='color:red'> Something seems wrong in how you have coded the main_header... </span><br>";
+    }
+    
+    try {
+        var anchorsInNav = document.getElementsByTagName("nav")[0].getElementsByTagName("a");
+        if (anchorsInNav.length == 2 ){
+            errors = errors +  " You have the correct number of links in the nav (e.g. 2)<br>";
+        }else{
+            errors = errors + "<span style='color:red'> Something seems wrong in how you have coded links in the nav </span><br>";
+        }
+    }
+    catch(err) {
+        errors = errors + "<span style='color:red'> Something seems wrong in how you have coded the navigation... </span><br>";
+    }  
+    
+    try {
+        var cssLink = document.getElementsByTagName("link")[0].href;;
+        if (cssLink.length > 0 ){
+            errors = errors +  " You have a link with an href attribute named " +  cssLink + "  That's good.<br>";
+            
+//            //kludge
+              var urlVar = document.getElementById('urlPath').value;
+              urlVar = urlVar.replace("index.html",'');
+              urlVar = urlVar + "animation_styles.css";
+            
+//            //load css file and examine it
+              $("#div2").load( urlVar, function() {
+                testCSS()
+              });
+            
+            
+        }else{
+            errors = errors + "<span style='color:red'> Something seems to be wrong in how you coded the link to your css </span><br>";
+        }
+    }
+    catch(err) {
+        errors = errors + "<span style='color:red'> Something seems to be wrong in how you coded the link to your css... </span><br>";
+    }
+    
+    if (document.getElementById("div1").innerHTML.length < 1){
+        errors = "<span style='color:red'>ARE YOU SURE YOU ENTERED THE RIGHT URL? (No content seems to have been returned)</span><br>";
+    }
+    
+    document.getElementById('errors').innerHTML = errors   ;
+}
+
+function testCSS(){
+    varCSSSTring = document.getElementById("div2").innerHTML;
+    //gets rid of all spaces
+    varCSSSTring = varCSSSTring.replace(/\s/g,'');
+    var position = varCSSSTring.search("#main_header{background-color:#008080}");
+    if (position > 0){
+        document.getElementById('csserrors').innerHTML="Your CSS, based on a spot check, looks good<br>";
+        return true;
+    }else{
+        document.getElementById('csserrors').innerHTML="<span style='color:red'>Your CSS appears to have some problems</span><br>";
+        return false;
+    }
+}
+    
+</script>
+<style>
+    #div1, #div2{display:none};
+</style>
+</head>
+<body>
+<h4>Validator For Assignment 1 (Catches some errors but not all!)</h4>
+<!--This is the section that will be loaded from the URL.  However CSS keeps it hidden.-->
+<div id="div1"></div>
+
+ <!--This is the section that will be loaded from the URL to the css.  However CSS keeps it hidden.-->
+<div id="div2"></div>   
+    
+<input type="text" id="urlPath" size="100" value="Replace this text with your http (not https) URL"><br><br>
+<button>Test</button>
+<p></p>
+   
+<div id="errors"></div>   
+<div id="csserrors"></div>
+</body>
+</html>
