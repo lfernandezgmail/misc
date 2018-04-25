@@ -7,7 +7,7 @@
 $(document).ready(function(){
     $("button").click(function(){
     	var urlVar = document.getElementById('urlPath').value;
-        
+        urlVar = urlVar.replace("https", "http"); 
         var jqxhr = $.get( urlVar, function( data ) {
             var myElement =document.createElement('html');
             myElement.innerHTML = data;
@@ -148,12 +148,20 @@ function testCSS(varCSSString){
     }
 }
     
+    
+function tryReferrer(){
+    console.log("document.referrer:: " + document.referrer);
+    if (document.referrer.length > 10){
+        document.getElementById("urlPath").value=document.referrer;
+        document.getElementsByTagName('button')[0].click();
+    }
+}  
 </script>
 <style>
     #div1, #div2{display:none};
 </style>
 </head>
-<body>
+<body onload="tryReferrer()">
 <h4>Validator For Assignment 1 (Catches some errors but not all!!)</h4>
 <!--This is the section that will be loaded from the URL.  However CSS keeps it hidden.-->
 <div id="div1"></div>
